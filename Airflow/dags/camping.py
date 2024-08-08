@@ -152,10 +152,10 @@ dag = DAG(
     'gocamping_data_pipeline',
     default_args={
         'owner': 'airflow',
-        'start_date': datetime(2024, 7, 25),
+        'start_date': datetime(2024, 8, 6),
         'retries': 1,
     },
-    schedule_interval='0 0 * * 1',  # 매주 월요일 00:00에 실행
+    schedule_interval='0 15 * * 0',  # UTC : 매주 일요일 15:00에 실행  -> KST 월요일 00:00
 )
 
 fetch_data_task = PythonOperator(

@@ -199,7 +199,7 @@ def insert_to_mysql(**kwargs):
 fetch_data_task = PythonOperator(
     task_id='fetch_short_forecast',
     python_callable=fetch_short_forecast,
-    op_args=[datetime.now(seoul_timezone)],  # 오늘 날짜를 가져옵니다.
+    op_args=[(datetime.now(seoul_timezone) - timedelta(days=1)).strftime("%Y%m%d")],
     dag=dag,
 )
 

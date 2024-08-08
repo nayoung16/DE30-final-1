@@ -253,14 +253,14 @@ def insert_to_mysql(**kwargs):
 fetch_data_task = PythonOperator(
     task_id='fetch_middle_forecast',
     python_callable=fetch_middle_forecast,
-    op_args=[datetime.now(seoul_timezone).strftime("%Y%m%d")],  # 오늘 날짜를 가져옵니다.
+    op_args=[(datetime.now(seoul_timezone) - timedelta(days=1)).strftime("%Y%m%d")],  # 어제 날짜
     dag=dag,
 )
 
 delete_previous_data_task = PythonOperator(
     task_id='delete_previous_data',
     python_callable=delete_previous_data,
-    op_args=[datetime.now(seoul_timezone).strftime("%Y%m%d")],
+    op_args=[(datetime.now(seoul_timezone) - timedelta(days=1)).strftime("%Y%m%d")],  # 어제 날짜
     dag=dag,
 )
 
