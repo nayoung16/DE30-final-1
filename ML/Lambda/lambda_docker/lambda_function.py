@@ -14,9 +14,13 @@ def handler(event, context):
     try:
         data = json.loads(event['body'])
     
-        required_fields = ['gear_amount', 'convenience_facility', 'activity', 'companion', 'nature', 'transport', 'comfort', 'envrn_filter', 'thema_filter']
+        required_int_fields = ['gear_amount', 'convenience_facility', 'activity', 'companion', 'nature', 'transport', 'comfort']
+        required_str_fields = ['envrn_filter', 'thema_filter']
         doNm_fields = ['doNm']
-        missing_fields = [field for field in required_fields if field not in data]
+
+        all_required_fields = required_int_fields + required_str_fields
+
+        missing_fields = [field for field in all_required_fields if field not in data]
         missing_field_doNm = [field for field in doNm_fields if field not in data]
         if missing_field_doNm:
             return {
@@ -29,11 +33,18 @@ def handler(event, context):
                 "body": json.dumps({"error": f"Missing fields: {', '.join(missing_fields)}"})
             }
     
-        for field in required_fields:
+        for field in required_int_fields:
             if not isinstance(data[field], int):
                 return {
                     "statusCode": 400,
                     "body": json.dumps({"error": f"Expected integer for field {field}, got {type(data[field]).__name__}"})
+                }
+            
+        for field in required_str_fields:
+            if not isinstance(data[field], str):
+                return {
+                    "statusCode": 400,
+                    "body": json.dumps({"error": f"Expected str for field {field}, got {type(data[field]).__name__}"})
                 }
     
         rec_fields = ['gear_amount', 'convenience_facility', 'activity', 'companion', 'nature', 'transport', 'comfort']
