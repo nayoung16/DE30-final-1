@@ -99,7 +99,7 @@ MWAA에서의 크레딧 문제로 이후에 로컬에서 진행
 ![cicd](https://github.com/user-attachments/assets/f83c84a0-4366-40d8-9d9b-0bded116fe64)
 - main 브랜치에 push가 생기면, github actions에서 작성한 배포 스크립트에 따라 프로젝트를 빌드하고, 빌드된 프로젝트를 s3에 저장합니다.
 - Codedeploy에 빌드된 프로젝트 배포 명령을 내리고, Codedeploy는 도커 이미지를 빌드하여 EC2 서버에 배포합니다.
-- Github secrets에서 aws iam 사용자 키를 관리하고, application.properties 파일은 base64로 인코딩
+- Github secrets에서 aws iam 사용자 키를 관리하고, application.properties 파일은 base64로 인코딩하여 관리했습니다.
 
 ## 시연 영상
 
