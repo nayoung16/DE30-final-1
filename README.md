@@ -102,4 +102,5 @@ MWAA에서의 크레딧 문제로 이후에 로컬에서 진행
 - Github secrets에서 aws iam 사용자 키를 관리하고, application.properties 파일은 base64로 인코딩하여 관리했습니다.
 
 ## 시연 영상
+https://youtu.be/eyacumPURj4
 
