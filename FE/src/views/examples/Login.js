@@ -2,16 +2,20 @@
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, CardBody, CardHeader, Col, Container, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from "reactstrap";
+import { Button, Card, CardBody, Col, Container, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from "reactstrap";
 import { getUserInfo } from '../../api/getUserInfo';
 import { loginUser } from '../../api/loginUser';
 import { logoutUser } from '../../api/logoutUser';
 import { postLoginToken } from '../../api/postLoginToken';
+import Modal from "react-modal";
+
 export default function Login({ isLogin, setIsLogin }) {
   const navigate = useNavigate();
   const mainRef = useRef(null);
   const [form, setForm] = useState({ id: '', pw: '' });
   const [userInfo, setUserInfo] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -52,7 +56,8 @@ export default function Login({ isLogin, setIsLogin }) {
       const userInfo = await getUserInfo();
       setUserInfo(userInfo);
     } else {
-      alert('Login failed. Please check your credentials.');
+      setModalMessage("로그인에 실패했습니다.");
+      setModalIsOpen(true);
     }
   };
 
@@ -63,7 +68,8 @@ export default function Login({ isLogin, setIsLogin }) {
       navigate('/');
       setUserInfo(null);
     } else {
-      alert('Logout failed.');
+      setModalMessage("로그아웃에 실패했습니다.");
+      setModalIsOpen(true);
     }
   };
 
@@ -86,14 +92,14 @@ export default function Login({ isLogin, setIsLogin }) {
             <Row className="justify-content-center">
               <Col lg="5">
                 <Card className="bg-secondary shadow border-0">
-                  <CardHeader className="bg-white pb-5">
+                  {/* <CardHeader className="bg-white pb-5">
                     <div className="text-muted text-center mb-3">
                       <small>Sign in with</small>
                     </div>
                     <div className="btn-wrapper text-center">
-                      {/* <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center' }}>
+                      <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center' }}>
                         <GoogleLogin onGoogleSignIn={onGoogleSignIn} text="signin_with" />
-                      </div> */}
+                      </div>
                       <Button
                         className="btn-neutral btn-icon ml-1"
                         color="default"
@@ -112,10 +118,10 @@ export default function Login({ isLogin, setIsLogin }) {
                         <span className="btn-inner--text">Google https 작업중</span>
                       </Button>
                     </div>
-                  </CardHeader>
+                  </CardHeader> */}
                   <CardBody className="px-lg-5 py-lg-5">
                     <div className="text-center text-muted mb-4">
-                      <small>Or sign in with credentials</small>
+                      <strong>Sign in with credentials</strong>
                     </div>
                     <Form role="form" onSubmit={handleSubmit}>
                       <FormGroup className="mb-3">
@@ -191,6 +197,33 @@ export default function Login({ isLogin, setIsLogin }) {
           </Container>
         </section>
       </main>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Registration Error"
+        style={{
+          content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            border: 'none', // 테두리 색을 없앰
+            boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // 모달에 그림자 추가
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',  // 수직 방향 중앙 정렬
+            justifyContent: 'center', // 수평 방향 중앙 정렬
+          },
+          overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // 배경에 반투명 효과 추가
+          }
+        }}
+      >
+        <div class="fontNeo" style={{margin:'20px'}}>{modalMessage}</div>
+        <button type="button" className="btn-1 ml-1 btn btn-success" onClick={() => setModalIsOpen(false)}>Close</button>
+      </Modal>
     </>
   );
 }

@@ -10,7 +10,7 @@ export const getUserFavorites = async () => {
         },
         credentials: 'include',
       });
-      if (!response.ok) throw new Error('Failed to fetch user favorites');
+      if (!response.ok) throw new Error(`getUserFavorites response Not ok! status: ${response.status} `);
       return response.json();
     } catch (e) {
       console.error('getUserFavorites Error: ', e.message);

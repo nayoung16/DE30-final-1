@@ -36,7 +36,7 @@ public class UserAnswerController {
     private final RecCampListService recCampListService;
     private final CampDefaultInfoService campDefaultInfoService;
 
-    //@Value("${myapp.lambda.url}")
+    @Value("${myapp.lambda.url}")
     private String url;
 
     public UserAnswerController(UserAnswerService userAnswerService, UserInfoService userInfoService, RecCampListService recCampListService, CampDefaultInfoService campDefaultInfoService) {

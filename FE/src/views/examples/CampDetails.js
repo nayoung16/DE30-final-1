@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import camper4 from 'assets/img/brand/camper3.png';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { addUserFavorite } from "../../api/addUserFavorites";
 import { fetchCampDetails } from '../../api/fetchCampDetails';
 import { getUserFavorites } from "../../api/getUserFavorites";
 import { removeUserFavorite } from "../../api/removeUserFavorites";
-import camper4 from 'assets/img/brand/camper3.png';
 
 const CampDetails = () => {
     const { id } = useParams();
@@ -114,10 +114,12 @@ const CampDetails = () => {
                         </div>
                         <div style={{marginRight: "10px", flex: 5}}>
                         <img src={campDetails.campDefaultInfoDto.firstImageUrl || camper4} 
+                        objectFit="cover"
                         alt={campDetails.campDefaultInfoDto.facltNm}
                         ref={imgRef}
-                        style={{ borderRadius: '10px'}} 
+                        style={{ borderRadius: '10px', height:"480px",width:"720px"}} 
                         onError={handleError}  />
+                        
                         </div>
                     </div>
                     <div style={{ flex: 1 }}>

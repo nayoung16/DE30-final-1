@@ -14,9 +14,7 @@ export const addUserFavorite = async (contentId) => {
             credentials: 'include',
             body: JSON.stringify(contentId)
         });
-        console.log(contentId);
-        console.log(response);
-        if (!response.ok) throw new Error('Failed to add favorite');
+        if (!response.ok) throw new Error(`addFav response Not ok! status: ${response.status} `);
         return response.json();
     } catch (e) {
         console.error('addUserFavorite Error: ', e.message);

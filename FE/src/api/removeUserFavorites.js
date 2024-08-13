@@ -12,10 +12,10 @@ export const removeUserFavorite = async (contentId) => {
             credentials: 'include',
             body: JSON.stringify(contentId)
         });
-        if (!response.ok) throw new Error('Failed to remove favorite-frontApi1');
+        if (!response.ok) throw new Error(`removeFav response Not ok! status: ${response.status} `);
         return response.json();
     } catch (e) {
-        console.error('removeUserFavorite Error-frontApi2: ', e.message);
+        console.error('fetch error', e.message);
         return false;
     }
 };

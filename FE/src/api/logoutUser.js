@@ -8,7 +8,8 @@ export const logoutUser = async () => {
         method: 'POST',
         credentials: 'include',
       });
-      if (!response.ok) throw new Error('bad server condition');
+      if (!response.ok) throw new Error(`logoutUser response Not ok! status: ${response.status} `);
+      alert("로그아웃이 성공적으로  완료되었습니다.")
       return true;
     } catch (e) {
       console.error('logoutUser Error: ', e.message);

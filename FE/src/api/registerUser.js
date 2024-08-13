@@ -21,8 +21,9 @@ export const registerUser = async (userInfo) => {
         body: JSON.stringify(formattedUserInfo)
       });
       if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`registerUser response Not ok! status: ${response.status} ` );
       }
+      alert("회원가입이 성공적으로 완료되었습니다. 로그인이 필요합니다.")
       return await response.json(); // 응답을 JSON 형태로 파싱
   } catch (error) {
       console.error('registerUser Error: ', error);

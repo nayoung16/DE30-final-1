@@ -14,8 +14,7 @@ export const searchCamp = async (campName) => {
             body: JSON.stringify({ campName }), // campName을 JSON 형식으로 변환하여 전송
         });
 
-        if (!response.ok) throw new Error('bad server condition');
-        console.log(response);
+        if (!response.ok) throw new Error(`searchCamp response Not ok! status: ${response.status} `);
         return response.json(); // JSON 응답 파싱
 
         

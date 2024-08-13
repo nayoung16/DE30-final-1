@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Col,
   Container,
   Form,
@@ -13,17 +12,19 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Row,
+  Row
 } from "reactstrap";
 import { registerUser } from "../../api/registerUser"; // registerUser API 함수 추가
+import Modal from "react-modal";
 
-import SimpleFooter from "components/Footers/SimpleFooter.js";
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
 
 const Register = () => {
   const mainRef = useRef(null);
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -43,7 +44,8 @@ const Register = () => {
     if (result) {
       navigate("/login");
     } else {
-      alert("Registration failed. 유저가 이미 존재하거나 다른 오류임");
+      setModalMessage("Registration failed. 유저가 이미 존재하거나 다른 오류임");
+      setModalIsOpen(true);
     }
   };
 
@@ -66,12 +68,12 @@ const Register = () => {
             <Row className="justify-content-center">
               <Col lg="5">
                 <Card className="bg-secondary shadow border-0">
-                  <CardHeader className="bg-white pb-5">
+                  {/* <CardHeader className="bg-white pb-5">
                     <div className="text-muted text-center mb-3">
                       <small>Sign up with</small>
                     </div>
                     <div className="text-center">
-                      {/* <Button
+                       <Button
                         className="btn-neutral btn-icon mr-4"
                         color="default"
                         href="#pablo"
@@ -87,7 +89,7 @@ const Register = () => {
                           />
                         </span>
                         <span className="btn-inner--text">Github</span>
-                      </Button> */}
+                      </Button>
                       <Button
                         className="btn-neutral btn-icon ml-1"
                         color="default"
@@ -106,10 +108,10 @@ const Register = () => {
                         <span className="btn-inner--text">Google</span>
                       </Button>
                     </div>
-                  </CardHeader>
+                  </CardHeader> */}
                   <CardBody className="px-lg-5 py-lg-5">
                     <div className="text-center text-muted mb-4">
-                      <small>Or sign up with credentials</small>
+                      <strong>Sign up with credentials</strong>
                     </div>
                     <Form role="form" onSubmit={handleSubmit}>
                       <FormGroup>
@@ -161,14 +163,6 @@ const Register = () => {
                           />
                         </InputGroup>
                       </FormGroup>
-                      <div className="text-muted font-italic">
-                        <small>
-                          password strength:{" "}
-                          <span className="text-success font-weight-700">
-                            strong
-                          </span>
-                        </small>
-                      </div>
                       <div className="text-center">
                         <Button className="mt-4" color="primary" type="submit">
                           Create account
@@ -182,7 +176,34 @@ const Register = () => {
           </Container>
         </section>
       </main>
-      <SimpleFooter />
+       {/* 여기서 모달 추가 */}
+       <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Registration Error"
+        style={{
+          content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            border: 'none', // 테두리 색을 없앰
+            boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // 모달에 그림자 추가
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',  // 수직 방향 중앙 정렬
+            justifyContent: 'center', // 수평 방향 중앙 정렬
+          },
+          overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // 배경에 반투명 효과 추가
+          }
+        }}
+      >
+        <div class="fontNeo" style={{margin:'20px'}}>{modalMessage}</div>
+        <button type="button" className="btn-1 ml-1 btn btn-success" onClick={() => setModalIsOpen(false)}>Close</button>
+      </Modal>
     </>
   );
 };

@@ -1,37 +1,22 @@
 import { fetchCampNames } from "api/getCampNames";
-import { getUserInfo } from "api/getUserInfo";
 import { searchCamp } from "api/searchCamp";
 import "assets/css/argon-design-system-react.css";
 import camper4 from 'assets/img/brand/camper3.png';
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
-import { useEffect, useRef, useState, useTransition } from 'react';
-import { useNavermaps } from 'react-naver-maps';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Button, Col, Input, InputGroup } from "reactstrap";
+import { Input, InputGroup } from "reactstrap";
 import PaginationSection from 'views/IndexSections/PagenationSection';
-import { updateUserAnswer } from '../../api/updateUserAnswer';
 import '../../assets/css/campDetails.css';
 import '../../assets/css/fonts.css';
 
 export default function Search({ isLogin, setIsLogin }) {
   const navigate = useNavigate();
   const mainRef = useRef(null);
-  const [info, setInfo] = useState({});
-  const [styleNm, setStyleNm] = useState("");
-  const [modal, setModal] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const [isPending, startTransition] = useTransition();
-  const [currentPosition, setCurrentPosition] = useState({ lat: 37.3595704, lng: 127.105399 });
-  const [mapCenter, setMapCenter] = useState({ lat: 37.3595704, lng: 127.105399 });
-  const [markerPosition, setMarkerPosition] = useState({ lat: 37.3595704, lng: 127.105399 });
-  const [positionLoaded, setPositionLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedCamp, setSelectedCamp] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [resultsPerPage] = useState(5);
-  const navermaps = useNavermaps();
+  const [resultsPerPage] = useState(6);
   const [autocompleteResults, setAutocompleteResults] = useState([]);
   const [campNames, setCampNames] = useState([]);
 
@@ -39,47 +24,7 @@ export default function Search({ isLogin, setIsLogin }) {
     if (!isLogin) {
       navigate('/login-page');
     }
-
-    startTransition(async () => {
-      try {
-        const newInfo = await getUserInfo();
-        setInfo(newInfo);
-        if (newInfo) {
-          setStyleNm(newInfo.styleNm);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user info or favorites', error);
-      }
-    });
   }, [isLogin, setIsLogin, navigate]);
-
-  useEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    if (mainRef.current) {
-      mainRef.current.scrollTop = 0;
-    }
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const newCenter = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          setCurrentPosition(newCenter);
-          setMapCenter(newCenter);
-          setMarkerPosition(newCenter);
-          setPositionLoaded(true);
-        },
-        (error) => {
-          console.error("Error fetching location", error);
-        }
-      );
-    } else {
-      console.error("Geolocation not supported");
-    }
-  }, []);
 
   const handleDetailsClick = (contentId) => {
     navigate(`/camp-details/${contentId}`);
@@ -91,14 +36,6 @@ export default function Search({ isLogin, setIsLogin }) {
       setSearchResults(results || []);
       setAutocompleteResults([]); // 검색 버튼을 클릭했을 때 자동완성 목록을 비웁니다.
       setCurrentPage(1); // 검색 결과 업데이트 시 첫 페이지로 설정
-      if (results && results.length > 0) {
-        const newCenter = {
-          lat: results[0].mapY,
-          lng: results[0].mapX,
-        };
-        setMapCenter(newCenter);
-        setMarkerPosition(newCenter);
-      }
     } catch (error) {
       console.error('Error during search', error);
     }
@@ -156,32 +93,6 @@ export default function Search({ isLogin, setIsLogin }) {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // update answer 로직
-  const [response, setResponse] = useState(null);
-
-  // 예시 데이터
-  const userAnswerData = {
-      gear_amount: 0,
-      convenience_facility: 0,
-      activity: 0,
-      companion: 0,
-      nature: 0,
-      transport: 0,
-      comfort: 0,
-      envrn_filter: "산",
-      thema_filter: "놀거리",
-      doNm: "경기도"
-  };
-
-  const handleSubmit = async () => {
-      try {
-          const updatedResponse = await updateUserAnswer(userAnswerData);
-          setResponse(updatedResponse);
-      } catch (error) {
-          console.log('Error updating answer:', error);
-      }
-  };
-
   return (
     <>
       <DemoNavbar isLogin={isLogin} setIsLogin={setIsLogin} />
@@ -204,9 +115,8 @@ export default function Search({ isLogin, setIsLogin }) {
             </h1>
             <p className="lead">Search for your new Camping Spot !!</p>
           </div>
-          <div className="shape shape-style-1 shape-custom" style={{ width: '100%', display: 'flex' }}>
-            <Col lg="5" sm="6" style={{ display: 'flex', flexDirection: 'column', marginLeft: '15%', marginRight: '10%' }}>
-              <InputGroup className="mt-4 mx-lg-custom" style={{ width: '100%' }}>
+          <div style={{ width: '80%', display: 'flex', justifyContent: 'center', paddingRight :'10%', paddingLeft: '10%', paddingTop: '3%' }}>
+              <InputGroup style={{ width: '80%' }}>
                 <Input
                   placeholder="Search"
                   type="text"
@@ -239,7 +149,6 @@ export default function Search({ isLogin, setIsLogin }) {
                   </ul>
                 )}
               </InputGroup>
-            </Col>
           </div>
         </div>
         <div className="mt-4" style={{ display: 'flex' }}>

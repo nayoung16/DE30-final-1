@@ -211,7 +211,7 @@ const LocationSelector = ({ location, handleLocationChange }) => (
     <option value="11F10201">전주</option>
     <option value="11G00201">제주</option>
     <option value="11H20301">창원</option>
-    <option value="11C10301">청주</option>
+    <option value="11C10301">청주</option>  
     <option value="11D10301">춘천</option>
     <option value="11B20305">파주</option>
     <option value="11H10201">포항</option>
@@ -224,6 +224,8 @@ const WeatherColumnContent = ({ date, location }) => {
   const [hourlyData, setHourlyData] = useState([]);
   const [showWeatherModal, setShowWeatherModal] = useState(false);
   const [weatherDetails, setWeatherDetails] = useState(null);
+  const [noDataMessage, setNoDataMessage] = useState(null);
+
   const weatherIconStyle = {
     width: "96px",
     height: "96px",
@@ -247,13 +249,23 @@ const WeatherColumnContent = ({ date, location }) => {
     const hourlyForecast = await getShortForecast(date.format("YYYYMMDD"));
     if (hourlyForecast && Array.isArray(hourlyForecast)) {
       const filteredHourlyData = hourlyForecast.filter(item => item.regId === location);
-      const sortedHourlyData = filteredHourlyData
-        .map(item => ({
-          ...item,
-          fcstTime: parseInt(item.fcstTime, 10)
-        }))
-        .sort((a, b) => a.fcstTime - b.fcstTime);
-      setHourlyData(sortedHourlyData);
+      if (filteredHourlyData.length === 0) {
+        // If no data is found, set no data message
+        setNoDataMessage("수집되지 않은 데이터입니다");
+        setHourlyData([]);
+      } else {
+        const sortedHourlyData = filteredHourlyData
+          .map(item => ({
+            ...item,
+            fcstTime: parseInt(item.fcstTime, 10)
+          }))
+          .sort((a, b) => a.fcstTime - b.fcstTime);
+        setHourlyData(sortedHourlyData);
+        setNoDataMessage(null);
+      }
+    } else {
+      setNoDataMessage("수집되지 않은 데이터입니다");
+      setHourlyData([]);
     }
     setWeatherDetails(forecast);
     setShowWeatherModal(true);
@@ -284,28 +296,30 @@ const WeatherColumnContent = ({ date, location }) => {
         </BottomSection>
       </ColumnContent>
 
-  <Modal 
-      isOpen={showWeatherModal} 
-      toggle={toggleWeatherModal} 
-      size="lg" // Default size, you can override with specific CSS if needed
-    >
-      <ModalBody style={{padding: '0' }}>
-        {weatherDetails ? (
-          <WeatherCard 
-            date={date} 
-            weatherDetails={weatherDetails} 
-            hourlyData={hourlyData} 
-          />
-        ) : (
-          <div>Loading...</div>
-        )}
-      </ModalBody>
-      <ModalFooter>
-        <Button color="secondary" onClick={toggleWeatherModal}>
-          Close
-        </Button>
-      </ModalFooter>
-    </Modal>
+      <Modal 
+        isOpen={showWeatherModal} 
+        toggle={toggleWeatherModal} 
+        size="lg"
+      >
+        <ModalBody style={{ padding: '0' }}>
+          {noDataMessage ? (
+            <div style={{ padding: '20px', textAlign: 'center' , fontSize: '24px', fontWeight: 'fontNB'}}>{noDataMessage}</div>
+          ) : weatherDetails && hourlyData.length > 0 ? (
+            <WeatherCard 
+              date={date} 
+              weatherDetails={weatherDetails} 
+              hourlyData={hourlyData} 
+            />
+          ) : (
+            <div>Loading...</div>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggleWeatherModal}>
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };

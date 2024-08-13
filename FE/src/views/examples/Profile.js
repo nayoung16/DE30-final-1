@@ -9,6 +9,7 @@ import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Container, Modal, Row } from "reactstrap";
+
 export default function Profile({ isLogin, setIsLogin }) {
   const navigate = useNavigate();
   const mainRef = useRef(null);
@@ -20,7 +21,18 @@ export default function Profile({ isLogin, setIsLogin }) {
   const [newNickName, setNewNickName] = useState("");
   const [loading, setLoading] = useState(false);
   const [favorites, setFavorites] = useState([]);
-
+  
+  const IconsMap = {
+    글램핑: require("assets/img/recommandImg/글램핑.png"),
+    모토캠핑: require("assets/img/recommandImg/모토캠핑.png"),
+    미니멀캠핑: require("assets/img/recommandImg/미니멀캠핑.png"),
+    백패킹: require("assets/img/recommandImg/백패킹.png"),
+    브롬핑: require("assets/img/recommandImg/브롬핑.png"),
+    오토캠핑: require("assets/img/recommandImg/오토캠핑.png"),
+    차박캠핑: require("assets/img/recommandImg/차박캠핑.png"),
+    캠프닉: require("assets/img/recommandImg/캠프닉.png"),
+    풀캠핑: require("assets/img/recommandImg/풀캠핑.png"),
+  };
   useEffect(() => {
     if (!isLogin) {
       navigate('/login-page');
@@ -137,10 +149,6 @@ export default function Profile({ isLogin, setIsLogin }) {
       setLoading(false);
     }
   };
-  // const handlefetchCampDetail = async(contentId) =>{
-  //   const campDetails = await CampDetails(contentId);
-  //   if(campDetails)
-  // } 
 
   return (
     <>
@@ -226,29 +234,58 @@ export default function Profile({ isLogin, setIsLogin }) {
               <div className="px-4">
                 <Row className="justify-content-center">
                   <Col lg="7">
-                  <section>
-                    <div className="text-center">
-                        {/* {styleNm || "캠핑스타일이 없습니다"} */}
-                      <div className="h6 mt-4">
-                        <h5 class="fontNeo">나의 캠핑 스타일</h5>
-                        <ul
-                          style={{
-                            backgroundColor: "#F5F1EF",
-                            backgroundSize: "70%",
-                            borderRadius: "10px",
-                            margin: "auto",
-                            paddingLeft: "15px",
-                            paddingRight: "10px",
-                            paddingTop: "10px",
-                            paddingBottom: "10px",
-                            width:"50%"
-                          }}
-                        >
-                          {styleNm || "캠핑스타일이 없습니다"}
-                        </ul>
-                      </div>
-                    </div>
-                  </section>
+                <section>
+                  <div className="px-4">
+                    <Row className="justify-content-center">
+                      <Col lg="7">
+                        <section>
+                          <div className="text-center">
+                            <div className="h6 mt-4">
+                              <h5 className="fontNeo">나의 캠핑 스타일</h5>
+                              <img 
+                                  src={IconsMap[styleNm]}
+                                  alt="캠핑 스타일 이미지"
+                                  style={{
+                                    borderRadius: "10px",
+                                    marginRight: "15px",
+                                    width: "100px",
+                                    height: "100px",
+                                    objectFit: "cover"
+                                  }} 
+                                />
+                              <div 
+                                style={{ 
+                                  display: "flex", 
+                                  alignItems: "center", 
+                                  justifyContent: "center", 
+                                  margin: "20px auto" 
+                                }}
+                              >
+                                <ul
+                                  style={{
+                                    backgroundColor: "#F5F1EF",
+                                    borderRadius: "10px",
+                                    paddingLeft: "15px",
+                                    paddingRight: "10px",
+                                    paddingTop: "10px",
+                                    paddingBottom: "10px",
+                                    width: "50%",
+                                    display: "flex", // 플렉스 박스로 설정
+                                    alignItems: "center", // 수직 중앙 정렬
+                                    justifyContent: "center", // 수평 중앙 정렬
+                                    textAlign: "center", // 텍스트 중앙 정렬
+                                  }}
+                                >
+                                  {styleNm || "캠핑스타일이 없습니다"}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      </Col>
+                    </Row>
+                  </div>
+                </section>
                   <div className="text-center mt-5">
                     <h5 class="fontNeo">캠핑 즐겨찾기 목록</h5>
                     <ul className="list-unstyled">
@@ -285,7 +322,6 @@ export default function Profile({ isLogin, setIsLogin }) {
                       )}
                     </ul>
                   </div>
-
                   </Col>
                 </Row>
               </div>

@@ -57,6 +57,8 @@ export default function App() {
             <Route path="/calendar-page" element={isLogin ? <Calendar isLogin={isLogin} setIsLogin={setIsLogin} /> : <Navigate to="login-page" replace />} />
             <Route path="/register-page" element={<Register />} />
             <Route path="/recommand-page" element={<RecommandMainPage isLogin={isLogin} setIsLogin={setIsLogin} />} />
+            <Route path="/camp-details/:id" element={<CampDetails />} />
+            <Route path="/" element={<Index isLogin={isLogin} setIsLogin={setIsLogin} />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
